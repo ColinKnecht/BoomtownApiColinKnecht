@@ -14,6 +14,7 @@ namespace BoomtownApiColinKnecht
         private const string BOOMTOWN_GITHUB_URL = "https://api.github.com/orgs/BoomTownROI";
         private const string BOOMTOWN_URL_CONTAINING = "api.github.com/orgs/BoomTownROI/";
         public static HttpService webService = new HttpService();
+        public static int PublicReposCount = 0;
         static void Main(string[] args)
         {
             Console.WriteLine("Github BoomTown Api - Colin Knecht");
@@ -21,12 +22,15 @@ namespace BoomtownApiColinKnecht
             ListAllIds(organization);
             IsUpdatedDateGreaterThanCreatedDate(organization);
 
+            Console.WriteLine("Program Complete, Press Enter to exit");
             Console.ReadLine();
         }
 
         public static Organization GetOrganization()
         {
             var organization = JsonConvert.DeserializeObject<Organization>(webService.Get(BOOMTOWN_GITHUB_URL));
+            PublicReposCount = organization.Public_Repos;
+            webService.TestRepoCount(PublicReposCount, organization.Repos_Url);
 
             return organization;
         }
