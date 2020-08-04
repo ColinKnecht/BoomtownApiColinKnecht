@@ -19,6 +19,7 @@ namespace BoomtownApiColinKnecht
             Console.WriteLine("Github BoomTown Api - Colin Knecht");
             var organization = GetOrganization();
             ListAllIds(organization);
+            IsUpdatedDateGreaterThanCreatedDate(organization);
 
             Console.ReadLine();
         }
@@ -62,27 +63,45 @@ namespace BoomtownApiColinKnecht
                 {
                     case "repos":
                         data = JsonConvert.DeserializeObject<Repo[]>(result);
-                        PrintRepoTypeIds(data);
+                        if (data != null)
+                        {
+                            PrintRepoTypeIds(data);
+                        }
                         break;
                     case "events":
                         data = JsonConvert.DeserializeObject<Event[]>(result);
-                        PrintEventTypeIds(data);
+                        if (data != null)
+                        {
+                            PrintEventTypeIds(data);
+                        }
                         break;
                     case "hooks":
                         data = JsonConvert.DeserializeObject<Hook[]>(result);
-                        //PrintTypeIds(data, "Hooks");
+                        if (data != null)
+                        {
+                            PrintHookTypeIds(data);
+                        }
                         break;
                     case "issues":
                         data = JsonConvert.DeserializeObject<Issue[]>(result);
-                        //PrintTypeIds(data, "Issues");
+                        if (data != null)
+                        {
+                            PrintIssueTypeIds(data);
+                        }
                         break;
                     case "members":
                         data = JsonConvert.DeserializeObject<Member[]>(result);
-                        PrintMemberTypeIds(data);
+                        if (data != null)
+                        {
+                            PrintMemberTypeIds(data);
+                        }
                         break;
                     case "public_members":
                         data = JsonConvert.DeserializeObject<PublicMember[]>(result);
-                        PrintPublicMemberTypeIds(data);
+                        if (data != null)
+                        {
+                            PrintPublicMemberTypeIds(data);
+                        }
                         break;
                     default:
                         throw new Exception("Parsing Error: Unknown Url Type");
@@ -90,9 +109,10 @@ namespace BoomtownApiColinKnecht
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Exception caught: " + e.Message);
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
-
         }
 
         public static void PrintRepoTypeIds(Object[] data)
@@ -113,6 +133,24 @@ namespace BoomtownApiColinKnecht
             }
         }
 
+        public static void PrintHookTypeIds(Object[] data)
+        {
+            Console.WriteLine("============All Ids for the type of Hook==============");
+            foreach(Hook hook in data)
+            {
+                Console.WriteLine("Hook Id = " + hook.Id);
+            }
+        }
+
+        public static void PrintIssueTypeIds(Object[] data)
+        {
+            Console.WriteLine("============All Ids for the type of Issue==============");
+            foreach(Issue issue in data)
+            {
+                Console.WriteLine("Issue Id = " + issue.Id);
+            }
+        }
+
         public static void PrintMemberTypeIds(Object[] data)
         {
             Console.WriteLine("============All Ids for the type of Member==============");
@@ -127,7 +165,27 @@ namespace BoomtownApiColinKnecht
             Console.WriteLine("============All Ids for the type of  Public Member==============");
             foreach (PublicMember publicMember in data)
             {
-                Console.WriteLine("Id = " + publicMember.Id);
+                Console.WriteLine("Id = " + publicMember.Id + " ---- Can Be Found At: " + publicMember.Url);
+            }
+        }
+
+        public static bool IsUpdatedDateGreaterThanCreatedDate(Organization organization)
+        {
+            var updatedDate = organization.Updated_At.Date;
+            var createdDate = organization.Created_At.Date;
+            if (organization.Updated_At > organization.Created_At)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(organization.Name + "'s " + " Updated date(" + updatedDate+") is greater than created date("+ createdDate+ ").");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                return true;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine(organization.Name + "'s " + " Created date( "+ createdDate +") is greater than updated date("+ updatedDate + ").");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                return false;
             }
         }
 

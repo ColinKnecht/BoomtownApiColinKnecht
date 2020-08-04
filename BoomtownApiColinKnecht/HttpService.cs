@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace BoomtownApiColinKnecht
@@ -20,6 +21,8 @@ namespace BoomtownApiColinKnecht
                 request.UserAgent = "johnSmith";
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                //response.Headers.Add("X-Total-Count");
+
                 Stream stream = response.GetResponseStream();
                 StreamReader streamReader = new StreamReader(stream);
                 string result = streamReader.ReadToEnd();
@@ -28,12 +31,16 @@ namespace BoomtownApiColinKnecht
             }
             catch (WebException e)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Error Raised at Url: " + url + ".....Error Message:" + e.Message);
+                Console.ForegroundColor = ConsoleColor.Gray;
                 return "";
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Exception Raised!!" + e.Message);
+                Console.ForegroundColor = ConsoleColor.Gray;
                 return "";
             }
         }
