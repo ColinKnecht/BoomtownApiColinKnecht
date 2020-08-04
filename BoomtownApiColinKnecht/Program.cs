@@ -124,7 +124,7 @@ namespace BoomtownApiColinKnecht
             Console.WriteLine("============All Ids for the type of Repo==============");
             foreach (Repo repo in data)
             {
-                Console.WriteLine("Repo Id = " + repo.Id + "----Can Be Found At: " + repo.Html_Url);
+                Console.WriteLine("Repo Id = " + repo.Id + "----Can Be Found At: " + repo.Url);
             }
         }
 
